@@ -31,16 +31,8 @@
     overflow: auto;
   }
 
-  &__heading-container {
+  &__container-heading {
     margin-bottom: 20px;
-  }
-
-  &__heading,
-  &__sub-heading {
-    text-align: center;
-    text-transform: capitalize;
-    font-size: 4rem;
-    margin: 0.5rem;
 
     &--green {
       color: green;
@@ -49,6 +41,14 @@
     &--red {
       color: red;
     }
+  }
+
+  &__heading,
+  &__sub-heading {
+    text-align: center;
+    text-transform: capitalize;
+    font-size: 4rem;
+    margin: 0.5rem;
   }
 
   &__sub-heading {

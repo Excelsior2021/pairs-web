@@ -1,88 +1,90 @@
 import { test, it, describe, expect, beforeEach, vi } from "vitest"
-import {
-  playerResponseHandler,
-  playerTurnHandler,
-} from "@multiplayer-event-functions"
-import { Action } from "@enums"
+import { playerTurn, playerResponse } from "@multiplayer-event-functions"
+import { Action, Suit } from "@enums"
+import type { card, player, playerRequest } from "@types"
 
 describe("multiplayer event functions", () => {
   const playerID = 1
   const handleActionMock = vi.fn()
+  let player: player
 
   beforeEach(() => {
-    vi.resetAllMocks()
+    vi.clearAllMocks()
+    player = {
+      hand: [{ id: "1_of_clubs", img: "", suit: Suit.clubs, value: 1 }],
+    } as player
   })
 
-  describe("playerTurnHandler()", () => {
-    const card = { id: 1 }
-    const playerHandEventMock = {
+  describe("playerTurn()", () => {
+    const chosenCard = {
       target: {
-        id: 1,
+        id: "1_of_clubs",
       },
-    } as any
-    const player = {
-      hand: [card],
     } as any
 
     it("dispatches game action correctly", () => {
-      playerTurnHandler(playerHandEventMock, player, playerID, handleActionMock)
+      playerTurn(chosenCard, player, playerID, handleActionMock, Action)
 
       expect(handleActionMock).toBeCalledWith({
         type: Action.PLAYER_REQUEST,
         playerRequest: {
-          card,
+          card: { ...player.hand[0] },
           playerID,
         },
       })
     })
   })
 
-  describe("playerResponseHandler()", () => {
+  describe("playerResponse()", () => {
     describe("hasCard true", () => {
       const hasCard = true
-      let card = { value: 1 }
-      const opponentRequestMultiplayer = {
-        card,
-      } as any
-      const player = {
-        hand: [card],
-      } as any
-
       let log = "It's your opponent's turn again."
 
-      test("player match", () => {
-        playerResponseHandler(
+      test("player has card", () => {
+        const card = { ...player.hand[0] }
+        const opponentRequest = {
+          card,
+        } as playerRequest
+
+        playerResponse(
           hasCard,
-          opponentRequestMultiplayer,
+          opponentRequest,
           player,
           playerID,
-          handleActionMock
+          handleActionMock,
+          Action
         )
 
         expect(handleActionMock).toBeCalledWith({
           type: Action.PLAYER_MATCH,
           playerCard: { playerID, card },
-          opponentRequestMultiplayer,
+          opponentRequest,
           log,
         })
       })
 
-      test("no match", () => {
-        card = { value: 2 }
+      test("player doesn't have card", () => {
+        const card = {
+          id: "2_of_clubs",
+          img: "",
+          suit: Suit.clubs,
+          value: 2,
+        } as card
         log = `Are you sure? Do you have a ${card.value}?`
-        const opponentRequestMultiplayer = {
+        const opponentRequest = {
           card,
-        } as any
-        playerResponseHandler(
+        } as playerRequest
+        playerResponse(
           hasCard,
-          opponentRequestMultiplayer,
+          opponentRequest,
           player,
           playerID,
-          handleActionMock
+          handleActionMock,
+          Action
         )
 
         expect(handleActionMock).toBeCalledWith({
-          type: Action.PLAYER_MATCH,
+          type: Action.PLAYER_RESPONSE_MESSAGE,
           log,
         })
       })
@@ -90,47 +92,51 @@ describe("multiplayer event functions", () => {
 
     describe("hasCard false", () => {
       const hasCard = false
-      let card = { value: 1 }
-      const opponentRequestMultiplayer = {
-        card,
-      } as any
-      const player = {
-        hand: [card],
-      } as any
-      let log = `Are you sure? Do you have a ${card.value}?`
 
-      test("player match", () => {
-        playerResponseHandler(
+      test("player has card", () => {
+        const card = { ...player.hand[0] }
+        const opponentRequest = {
+          card,
+        } as playerRequest
+
+        const log = `Are you sure? Do you have a ${card.value}?`
+        playerResponse(
           hasCard,
-          opponentRequestMultiplayer,
+          opponentRequest,
           player,
           playerID,
-          handleActionMock
+          handleActionMock,
+          Action
         )
 
         expect(handleActionMock).toBeCalledWith({
-          type: Action.PLAYER_MATCH,
+          type: Action.PLAYER_RESPONSE_MESSAGE,
           log,
         })
       })
 
-      test("no match", () => {
-        card = { value: 2 }
-        const opponentRequestMultiplayer = {
-          card,
-        } as any
-        log = "Your opponent must now deal a card from the deck."
-        playerResponseHandler(
+      test("player doesn't have card", () => {
+        const opponentRequest = {
+          card: {
+            id: "2_of_clubs",
+            img: "",
+            suit: Suit.clubs,
+            value: 2,
+          },
+        } as playerRequest
+        const log = "Your opponent must now deal a card from the deck."
+        playerResponse(
           hasCard,
-          opponentRequestMultiplayer,
+          opponentRequest,
           player,
           playerID,
-          handleActionMock
+          handleActionMock,
+          Action
         )
 
         expect(handleActionMock).toBeCalledWith({
           type: Action.NO_PLAYER_MATCH,
-          opponentRequestMultiplayer,
+          opponentRequest,
           log,
         })
       })

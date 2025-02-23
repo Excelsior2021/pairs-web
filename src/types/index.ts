@@ -79,6 +79,8 @@ export type sessionState = {
   showPlayerModal: boolean
   playerModalHeading: PlayerModalHeading | null
   playerModalSubHeading: PlayerModalSubHeading | null
+  playerModalText: string
+  playerModalCards: card[]
   //multiplayer additional properties
   gameStartedMultiplayer: boolean
   deck?: card[] | null

@@ -1,16 +1,21 @@
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import { render } from "@solidjs/testing-library"
+import userEvent from "@testing-library/user-event"
 import Card from "@components/card/card"
 import { NonNumCardValue, Suit } from "@enums"
-import userEvent from "@testing-library/user-event"
 
 describe("Card component", () => {
   const cardMock = {
     id: "ace_of_clubs",
     value: NonNumCardValue.ace,
-    suit: suit.clubs,
+    suit: Suit.clubs,
     img: "./cards/ace_of_clubs.webp",
   }
+  const playerTurnHandlerMock = vi.fn()
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
 
   it("renders an opponent card", async () => {
     const { getByRole } = render(() => <Card card={cardMock} />)
@@ -21,16 +26,18 @@ describe("Card component", () => {
     expect(cardEl).not.toHaveClass("card--player")
     expect(cardEl).toHaveAttribute("src", "./cards/back.webp")
     expect(cardEl).toHaveAttribute("alt", "card")
+
+    const user = userEvent.setup()
+    await user.click(cardEl)
+    expect(playerTurnHandlerMock).not.toHaveBeenCalled()
   })
 
   it("renders a player card, while it's not the player's turn", async () => {
-    const user = userEvent.setup()
-    const playerTurnHandlerMock = vi.fn()
     const { getByRole } = render(() => (
       <Card
         card={cardMock}
         show={true}
-        player={true}
+        isPlayer={true}
         isPlayerTurn={false}
         playerTurnHandler={playerTurnHandlerMock}
       />
@@ -43,19 +50,17 @@ describe("Card component", () => {
     expect(cardEl).toHaveAttribute("src", cardMock.img)
     expect(cardEl).toHaveAttribute("alt", cardMock.id)
 
+    const user = userEvent.setup()
     await user.click(cardEl)
-
     expect(playerTurnHandlerMock).not.toHaveBeenCalled()
   })
 
   it("renders a player card, while it's the player's turn", async () => {
-    const user = userEvent.setup()
-    const playerTurnHandlerMock = vi.fn()
     const { getByRole } = render(() => (
       <Card
         card={cardMock}
         show={true}
-        player={true}
+        isPlayer={true}
         isPlayerTurn={true}
         playerTurnHandler={playerTurnHandlerMock}
       />
@@ -68,8 +73,8 @@ describe("Card component", () => {
     expect(cardEl).toHaveAttribute("src", cardMock.img)
     expect(cardEl).toHaveAttribute("alt", cardMock.id)
 
+    const user = userEvent.setup()
     await user.click(cardEl)
-
     expect(playerTurnHandlerMock).toHaveBeenCalledOnce()
   })
 })

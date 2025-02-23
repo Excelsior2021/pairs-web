@@ -54,7 +54,7 @@ const MultiplayerMenu: Component<props> = props => {
   ]
 
   return (
-    <div class="multiplayer-menu">
+    <div class="multiplayer-menu" data-testid="multiplayer menu">
       <h2 class="multiplayer-menu__heading">multiplayer</h2>
       <div class="multiplayer-menu__actions">
         <For each={actions}>

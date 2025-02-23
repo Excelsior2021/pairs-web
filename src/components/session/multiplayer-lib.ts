@@ -13,6 +13,7 @@ import type {
   sessionState,
   action,
   handleAction,
+  card,
 } from "@types"
 import type { Socket } from "socket.io-client"
 import type { SetStoreFunction } from "solid-js/store"
@@ -142,7 +143,7 @@ export const multiplayerReducer = (
       })
       break
     }
-    case Action.PLAYER_RESULT: {
+    case Action.PLAYER_MODAL: {
       if (action.activePlayer === playerID) {
         const updateState = {
           showPlayerModal: true,
@@ -153,6 +154,7 @@ export const multiplayerReducer = (
           showPlayerModal: boolean
           playerModalHeading: PlayerModalHeading
           playerModalSubHeading: PlayerModalSubHeading
+          playerModalText: string
           playerTurn: PlayerID
           playerOutput: PlayerOutput
           log: string
@@ -172,12 +174,16 @@ export const multiplayerReducer = (
         switch (action.playerOutput) {
           case PlayerOutput.OpponentMatch: {
             updateState.playerModalSubHeading = PlayerModalSubHeading.Opponent
+            updateState.playerModalText =
+              "You have a match! Both cards will be added to your pairs. It's your turn again!"
             break
           }
           case PlayerOutput.DeckMatch: {
             emitPlayerResponseMessage()
             updateState.playerTurn = playerID
             updateState.playerModalSubHeading = PlayerModalSubHeading.Deck
+            updateState.playerModalText =
+              "The value of the card you chose matches the value of the card you dealt from the deck! Both cards will be added to your pairs. It's your turn again!"
             break
           }
           case PlayerOutput.HandMatch: {
@@ -186,6 +192,8 @@ export const multiplayerReducer = (
             updateState.log = opponentTurn.log
             updateState.playerTurn = opponentTurn.player
             updateState.playerModalSubHeading = PlayerModalSubHeading.Player
+            updateState.playerModalText =
+              "The value of the card you chose didn't match with the value of the dealt card but you had another match in your hand, both cards will be added to your pairs. It's your opponent's turn."
             break
           }
           case PlayerOutput.NoMatch: {
@@ -195,15 +203,26 @@ export const multiplayerReducer = (
             updateState.playerTurn = opponentTurn.player
             updateState.playerModalHeading = PlayerModalHeading.NoMatch
             updateState.playerModalSubHeading = PlayerModalSubHeading.None
+            updateState.playerModalText =
+              "No matches, the dealt card has been added to your hand. It's your opponent's turn."
             break
           }
         }
-        setState(updateState)
+        setState(state => {
+          let playerModalCards = state.player.pairs.slice(-2)
+          if (action.playerOutput === PlayerOutput.NoMatch)
+            playerModalCards = state.player.hand.slice(-1)
+
+          return {
+            ...updateState,
+            playerModalCards,
+          }
+        })
       }
       break
     }
     case Action.PLAYER_RESPONSE_MESSAGE: {
-      let log: string = action.log as string
+      let log: string = action.log!
       switch (action.playerOutput) {
         case PlayerOutput.DeckMatch: {
           log =
@@ -304,10 +323,9 @@ export const startSession = (socket: Socket, handleAction: handleAction) => {
       playerTurn,
     })
     handleAction({
-      type: Action.PLAYER_RESULT,
+      type: Action.PLAYER_MODAL,
       playerOutput,
       activePlayer,
-      serverState,
     })
 
     if (gameOver)

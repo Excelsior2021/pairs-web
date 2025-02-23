@@ -55,6 +55,8 @@ const Session: Component<props> = props => {
     showPlayerModal: false,
     playerModalHeading: null,
     playerModalSubHeading: null,
+    playerModalText: "",
+    playerModalCards: [],
     opponentRequest: null,
   } as sessionState
 
@@ -130,7 +132,7 @@ const Session: Component<props> = props => {
   }
 
   return (
-    <div class="session">
+    <div class="session" data-testid="session">
       <Show
         when={
           props.gameMode === GameMode.SinglePlayer ||
@@ -160,6 +162,8 @@ const Session: Component<props> = props => {
           playerModalSubHeading={
             sessionState.playerModalSubHeading as PlayerModalSubHeading
           }
+          playerModalText={sessionState.playerModalText}
+          playerModalCards={sessionState.playerModalCards}
           closePlayerModalHandler={closePlayerModalHandler}
         />
         <PairsModal

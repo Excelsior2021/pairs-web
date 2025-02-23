@@ -93,8 +93,9 @@ export class GameController {
               this.player.pairs.push(card)
               this.player.hand.splice(this.player.hand.indexOf(card), 1)
               this.handleAction({
-                type: Action.PLAYER_ACTION,
+                type: Action.PLAYER_MODAL,
                 playerOutput: PlayerOutput.OpponentMatch,
+                player: this.player,
               })
               this.updateUI("", true)
               this.playerChosenCard = null
@@ -166,8 +167,9 @@ export class GameController {
     const playerOutput = this.playerDealsOutput()
 
     this.handleAction({
-      type: Action.PLAYER_ACTION,
+      type: Action.PLAYER_MODAL,
       playerOutput,
+      player: this.player,
     })
 
     if (playerOutput === PlayerOutput.DeckMatch) this.updateUI("", true)

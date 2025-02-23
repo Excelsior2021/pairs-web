@@ -26,7 +26,7 @@ const App: Component = () => {
   }
 
   return (
-    <div class="app" data-testId="app">
+    <div class="app" data-testid="app">
       <a
         class="app__link"
         href="https://jonathankila.vercel.app"

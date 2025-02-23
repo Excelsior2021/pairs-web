@@ -12,7 +12,7 @@ import { deck } from "@assets"
 import type { card, handleAction } from "@types"
 import { Action, Outcome, PlayerOutput, Suit } from "@enums"
 
-describe("Game Controller", () => {
+describe("single player game controller", () => {
   let game: GameController
   let handleActionSpy: MockInstance
   let shuffleDeckSpy: MockInstance
@@ -28,7 +28,7 @@ describe("Game Controller", () => {
   let handMock: card[]
 
   beforeEach(() => {
-    const handleActionMock = vi.fn() as handleAction
+    const handleActionMock: handleAction = vi.fn()
     game = new GameController(deck, handleActionMock)
     handleActionSpy = vi.spyOn(game, "handleAction")
     shuffleDeckSpy = vi.spyOn(game, "shuffleDeck")
@@ -123,8 +123,9 @@ describe("Game Controller", () => {
       expect(game.player.hand).toEqual([])
       expect(game.opponent.hand).toEqual([])
       expect(handleActionSpy).toBeCalledWith({
-        type: Action.PLAYER_ACTION,
+        type: Action.PLAYER_MODAL,
         playerOutput: PlayerOutput.OpponentMatch,
+        player: game.player,
       })
       expect(updateUISpy).toBeCalledWith("", true)
       expect(game.playerChosenCard).toBeNull()
@@ -203,8 +204,9 @@ describe("Game Controller", () => {
       game.playerDeals()
       expect(playerDealsOutputSpy).toHaveBeenCalledOnce()
       expect(handleActionSpy).toBeCalledWith({
-        type: Action.PLAYER_ACTION,
+        type: Action.PLAYER_MODAL,
         playerOutput: PlayerOutput.DeckMatch,
+        player: game.player,
       })
       expect(updateUISpy).toBeCalledWith("", true)
     })
@@ -215,8 +217,9 @@ describe("Game Controller", () => {
       game.playerDeals()
       expect(playerDealsOutputSpy).toHaveBeenCalledOnce()
       expect(handleActionSpy).toBeCalledWith({
-        type: Action.PLAYER_ACTION,
+        type: Action.PLAYER_MODAL,
         playerOutput: PlayerOutput.HandMatch,
+        player: game.player,
       })
       expect(opponentTurnSpy).toHaveBeenCalledOnce()
     })
@@ -227,8 +230,9 @@ describe("Game Controller", () => {
       game.playerDeals()
       expect(playerDealsOutputSpy).toHaveBeenCalledOnce()
       expect(handleActionSpy).toBeCalledWith({
-        type: Action.PLAYER_ACTION,
+        type: Action.PLAYER_MODAL,
         playerOutput: PlayerOutput.NoMatch,
+        player: game.player,
       })
       expect(opponentTurnSpy).toHaveBeenCalledOnce()
     })

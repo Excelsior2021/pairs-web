@@ -1,15 +1,20 @@
-import { afterEach, describe, expect, it, test, vi } from "vitest"
+import { beforeEach, describe, expect, it, test, vi } from "vitest"
 import { render, waitFor } from "@solidjs/testing-library"
-import user from "@testing-library/user-event"
+import { userEvent } from "@testing-library/user-event"
 import MainMenu from "@components/main-menu/main-menu"
-import {
-  setMultiplayerMenu,
-  setSessionStarted,
-} from "@components/game-screen/game-screen"
-import { setShowInstructions } from "@components/instructions/instructions"
+import { GameMode } from "@enums"
 
 describe("MainMenu Component", () => {
-  const { getByRole, getByTestId } = render(() => <MainMenu />)
+  const setGameModeMock = vi.fn()
+  const setMultiplayerMenuMock = vi.fn()
+  const setShowInstructionsMock = vi.fn()
+  const { getByRole, getByTestId } = render(() => (
+    <MainMenu
+      setGameMode={setGameModeMock}
+      setMultiplayerMenu={setMultiplayerMenuMock}
+      setShowInstructions={setShowInstructionsMock}
+    />
+  ))
 
   const heading = getByRole("heading", {
     level: 2,
@@ -51,27 +56,31 @@ describe("MainMenu Component", () => {
   })
 
   describe("actions", () => {
-    vi.mock("@components/game-screen/game-screen")
-    vi.mock("@components/instructions/instructions")
-    user.setup()
+    const user = userEvent.setup()
 
-    afterEach(() => {
-      vi.resetAllMocks()
+    beforeEach(() => {
+      vi.clearAllMocks()
     })
 
     test("single player button clicked", async () => {
       await user.click(singlePlayerButton)
-      expect(setSessionStarted).toHaveBeenCalledWith(true)
+      expect(setGameModeMock).toHaveBeenCalledWith(GameMode.SinglePlayer)
+      expect(setMultiplayerMenuMock).not.toHaveBeenCalled()
+      expect(setShowInstructionsMock).not.toHaveBeenCalled()
     })
 
     test("multiplayer button clicked", async () => {
       await user.click(multiplayerButton)
-      expect(setMultiplayerMenu).toHaveBeenCalledWith(true)
+      expect(setMultiplayerMenuMock).toHaveBeenCalledWith(true)
+      expect(setGameModeMock).not.toHaveBeenCalled()
+      expect(setShowInstructionsMock).not.toHaveBeenCalled()
     })
 
     test("instructions button clicked", async () => {
       await user.click(instructionsButton)
-      expect(setShowInstructions).toHaveBeenCalledWith(true)
+      expect(setShowInstructionsMock).toHaveBeenCalledWith(true)
+      expect(setGameModeMock).not.toHaveBeenCalled()
+      expect(setMultiplayerMenuMock).not.toHaveBeenCalled()
     })
   })
 })

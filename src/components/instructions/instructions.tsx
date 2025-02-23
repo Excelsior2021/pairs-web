@@ -24,7 +24,7 @@ const Instructions: Component<props> = props => {
       showModal={props.showInstructions}
       setShowModal={props.setShowInstructions}
       heading="instructions">
-      <div class="instructions">
+      <div class="instructions" data-testid="instructions">
         <p class="instructions__text">
           The aim is to have the most pairs of cards at the end of the game.
         </p>

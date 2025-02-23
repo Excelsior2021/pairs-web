@@ -4,24 +4,15 @@ import GameOver from "@components/game-over/game-over"
 import { Outcome } from "@enums"
 
 describe("GameOver component", () => {
-  let Component: Element
-
-  afterEach(() => {
-    const { unmount } = render(() => Component)
-    unmount()
-  })
-
   test("render player wins outcome", () => {
-    Component = (
+    const { getByText } = render(() => (
       <GameOver
         outcome={Outcome.Player}
         playerPairsCount={20}
         opponentPairsCount={10}
         deckCount={0}
       />
-    ) as Element
-
-    const { getByText } = render(() => Component)
+    ))
 
     const outcome = getByText(Outcome.Player)
 
@@ -29,16 +20,14 @@ describe("GameOver component", () => {
   })
 
   test("render opponent wins outcome", () => {
-    Component = (
+    const { getByText } = render(() => (
       <GameOver
         outcome={Outcome.Opponent}
         playerPairsCount={10}
         opponentPairsCount={20}
         deckCount={0}
       />
-    ) as Element
-
-    const { getByText } = render(() => Component)
+    ))
 
     const outcome = getByText(Outcome.Opponent)
 
@@ -46,16 +35,14 @@ describe("GameOver component", () => {
   })
 
   test("render draw outcome", () => {
-    Component = (
+    const { getByText } = render(() => (
       <GameOver
         outcome={Outcome.Draw}
         playerPairsCount={20}
         opponentPairsCount={20}
         deckCount={0}
       />
-    ) as Element
-
-    const { getByText } = render(() => Component)
+    ))
 
     const outcome = getByText(Outcome.Draw)
 
@@ -63,16 +50,14 @@ describe("GameOver component", () => {
   })
 
   it("renders correctly", () => {
-    Component = (
+    const { getByRole, getByText } = render(() => (
       <GameOver
         outcome={Outcome.Player}
         playerPairsCount={20}
         opponentPairsCount={10}
         deckCount={0}
       />
-    ) as Element
-
-    const { getByRole, getByText } = render(() => Component)
+    ))
 
     const gameOverHeading = getByRole("heading", {
       name: /game over/i,
