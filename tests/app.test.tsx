@@ -16,7 +16,7 @@ describe("App component", () => {
   })
 
   it("renders the main menu", () => {
-    const mainMenu = getByTestId("main-menu")
+    const mainMenu = getByTestId("main menu")
     expect(mainMenu).toBeInTheDocument()
   })
 })

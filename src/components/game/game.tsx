@@ -21,7 +21,7 @@ type props = {
 
 const Game: Component<props> = props => (
   <div class="game">
-    <Hand heading="Opponent Hand" hand={props.opponent!.hand} />
+    <Hand heading="Opponent Hand" hand={props.opponent.hand} />
     <div class="game__console">
       <Show
         when={!props.gameOver}

@@ -3,38 +3,53 @@ import Card from "@components/card/card"
 import Modal from "@components/modal/modal"
 import "./pairs-modal.scss"
 
-import type { player } from "@types"
+import type { card } from "@types"
 
 type props = {
-  player: player
-  opponent: player
+  playerPairs: card[]
+  opponentPairs: card[]
   showPairsModal: boolean
   setShowPairsModal: Setter<boolean>
 }
 
-const PairsModal: Component<props> = props => (
-  <Modal
-    showModal={props.showPairsModal}
-    setShowModal={props.setShowPairsModal}>
-    <div class="pairs-modal">
-      <div class="pairs-modal__pairs-container">
-        <p class="pairs-modal__heading">{`Your Pairs (${props.player.pairs.length})`}</p>
-        <div class="pairs-modal__pairs" data-testid="player pairs">
-          <For each={props.player.pairs}>
-            {card => <Card card={card} show={true} />}
-          </For>
-        </div>
+const PairsModal: Component<props> = props => {
+  const playersPairs = [
+    {
+      id: "player",
+      heading: `Your Pairs (${props.playerPairs.length})`,
+      pairs: props.playerPairs,
+    },
+    {
+      id: "opponent",
+      heading: `Opponent's Pairs (${props.opponentPairs.length})`,
+      pairs: props.opponentPairs,
+    },
+  ]
+  return (
+    <Modal
+      showModal={props.showPairsModal}
+      setShowModal={props.setShowPairsModal}>
+      <div class="pairs-modal">
+        <For each={playersPairs}>
+          {player => (
+            <div class="pairs-modal__pairs-container">
+              <p
+                class="pairs-modal__heading"
+                data-testid={`${player.id} heading`}>
+                {player.heading}
+              </p>
+              <div
+                class="pairs-modal__pairs"
+                data-testid={`${player.id} pairs`}>
+                <For each={player.pairs}>
+                  {card => <Card card={card} show={true} />}
+                </For>
+              </div>
+            </div>
+          )}
+        </For>
       </div>
-      <div class="pairs-modal__pairs-container">
-        <p class="pairs-modal__heading">{`Opponent's Pairs (${props.opponent.pairs.length})`}</p>
-        <div class="pairs-modal__pairs" data-testid="opponent pairs">
-          <For each={props.opponent.pairs}>
-            {card => <Card card={card} show={true} />}
-          </For>
-        </div>
-      </div>
-    </div>
-  </Modal>
-)
-
+    </Modal>
+  )
+}
 export default PairsModal

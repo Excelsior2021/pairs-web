@@ -55,11 +55,6 @@ export type joinSessionHandler = (
   PlayerID: typeof PlayerIDEnum
 ) => void
 
-export type terminateCreateSession = (
-  socket: Socket | null,
-  setMultiplayerMenu: Setter<boolean>
-) => void
-
 export type playerRequest = {
   card: card
   playerID: number

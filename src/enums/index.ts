@@ -43,6 +43,11 @@ export enum OpponentOutput {
   NoMatch,
 }
 
+export enum SessionType {
+  Create,
+  Join,
+}
+
 export enum GameMode {
   SinglePlayer = "single player",
   Multiplayer = "multiplayer",

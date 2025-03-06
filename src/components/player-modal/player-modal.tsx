@@ -5,15 +5,12 @@ import {
   ModalHeadingColor,
   PlayerModalHeading,
   type PlayerModalSubHeading,
-  type PlayerOutput,
 } from "@enums"
 import "./player-modal.scss"
 
-import type { card, player } from "@types"
+import type { card } from "@types"
 
 type props = {
-  player: player
-  playerOutput: PlayerOutput
   showPlayerModal: boolean
   playerModalHeading: PlayerModalHeading
   playerModalSubHeading: PlayerModalSubHeading

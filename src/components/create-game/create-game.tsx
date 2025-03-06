@@ -7,7 +7,7 @@ type props = {
 }
 
 const CreateGame: Component<props> = props => (
-  <div class="create-game">
+  <div class="create-game" data-testid="create game">
     <h2 class="create-game__heading">Create Game Session</h2>
     <p class="create-game__text">
       Share the session ID with the user you want to play with

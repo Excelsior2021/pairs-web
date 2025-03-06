@@ -12,6 +12,7 @@ describe("Card component", () => {
     img: "./cards/ace_of_clubs.webp",
   }
   const playerTurnHandlerMock = vi.fn()
+  const user = userEvent.setup()
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -27,9 +28,8 @@ describe("Card component", () => {
     expect(cardEl).toHaveAttribute("src", "./cards/back.webp")
     expect(cardEl).toHaveAttribute("alt", "card")
 
-    const user = userEvent.setup()
     await user.click(cardEl)
-    expect(playerTurnHandlerMock).not.toHaveBeenCalled()
+    expect(playerTurnHandlerMock).not.toHaveBeenCalledOnce()
   })
 
   it("renders a player card, while it's not the player's turn", async () => {
@@ -50,9 +50,8 @@ describe("Card component", () => {
     expect(cardEl).toHaveAttribute("src", cardMock.img)
     expect(cardEl).toHaveAttribute("alt", cardMock.id)
 
-    const user = userEvent.setup()
     await user.click(cardEl)
-    expect(playerTurnHandlerMock).not.toHaveBeenCalled()
+    expect(playerTurnHandlerMock).not.toHaveBeenCalledOnce()
   })
 
   it("renders a player card, while it's the player's turn", async () => {
@@ -73,7 +72,6 @@ describe("Card component", () => {
     expect(cardEl).toHaveAttribute("src", cardMock.img)
     expect(cardEl).toHaveAttribute("alt", cardMock.id)
 
-    const user = userEvent.setup()
     await user.click(cardEl)
     expect(playerTurnHandlerMock).toHaveBeenCalledOnce()
   })

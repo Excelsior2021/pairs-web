@@ -17,7 +17,7 @@ const GameActions: Component<props> = props => {
   ]
 
   return (
-    <div class="game__actions">
+    <div class="game__actions" data-testid="game actions">
       <For each={actions}>
         {action => (
           <button class="game__button" onclick={action.onclick}>

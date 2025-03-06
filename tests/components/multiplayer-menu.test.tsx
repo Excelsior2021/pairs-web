@@ -1,9 +1,9 @@
 import MultiplayerMenu from "@components/multiplayer-menu/multiplayer-menu"
 import { render } from "@solidjs/testing-library"
 import * as lib from "@components/multiplayer-menu/component-lib"
-import { describe, expect, test, vi } from "vitest"
+import { afterEach, describe, expect, test, vi } from "vitest"
 import userEvent from "@testing-library/user-event"
-import { io } from "socket.io-client"
+import { SessionType } from "@enums"
 
 describe("MultiplayerMenu Component", () => {
   const multiplayerConfigMock = {
@@ -14,8 +14,8 @@ describe("MultiplayerMenu Component", () => {
   const setGameModeMock = vi.fn()
   const setJoinGameMock = vi.fn()
   const setMultiplayerMenuMock = vi.fn()
+  const terminateSessionMock = vi.fn()
 
-  const terminateCreateSessionSpy = vi.spyOn(lib, "terminateCreateSession")
   const createSessionHandlerSpy = vi.spyOn(lib, "createSessionHandler")
 
   const user = userEvent.setup()
@@ -26,8 +26,13 @@ describe("MultiplayerMenu Component", () => {
       setGameMode={setGameModeMock}
       setJoinGameMenu={setJoinGameMock}
       setMultiplayerMenu={setMultiplayerMenuMock}
+      terminateSession={terminateSessionMock}
     />
   ))
+
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
 
   const createSessionButton = getByRole("button", {
     name: /create session/i,
@@ -43,18 +48,20 @@ describe("MultiplayerMenu Component", () => {
 
   test("create session action", async () => {
     await user.click(createSessionButton)
-    const text = getByText(/creating session.../i)
+    const creatingSessionText = getByText(/creating session.../i)
     expect(createSessionHandlerSpy).toHaveBeenCalledOnce()
-    expect(text).toBeInTheDocument()
+    expect(creatingSessionText).toBeInTheDocument()
     expect(createSessionButton).toBeDisabled()
   })
 
   test("join session action", async () => {
     await user.click(joinSessionButton)
-    expect(terminateCreateSessionSpy).toHaveBeenCalledWith(
-      multiplayerConfigMock.socket,
-      setMultiplayerMenuMock
-    )
+    expect(terminateSessionMock).toHaveBeenCalledWith(SessionType.Create)
     expect(setJoinGameMock).toHaveBeenCalledWith(true)
+  })
+
+  test("backbButton action", async () => {
+    await user.click(backButton)
+    expect(terminateSessionMock).toHaveBeenCalledWith(SessionType.Create)
   })
 })

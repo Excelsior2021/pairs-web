@@ -274,8 +274,8 @@ export class GameController {
     isOpponentTurn = false,
     isDealFromDeck = false
   ) {
-    const player = { hand: this.player.hand, pairs: this.player.pairs }
-    const opponent = {
+    const player: player = { hand: this.player.hand, pairs: this.player.pairs }
+    const opponent: player = {
       hand: this.opponent.hand,
       pairs: this.opponent.pairs,
     }

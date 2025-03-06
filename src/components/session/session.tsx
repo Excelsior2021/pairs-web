@@ -16,7 +16,6 @@ import {
   GameMode,
   PlayerModalHeading,
   PlayerModalSubHeading,
-  PlayerOutput,
   type PlayerID,
 } from "@enums"
 import type {
@@ -153,8 +152,6 @@ const Session: Component<props> = props => {
         />
 
         <PlayerModal
-          player={sessionState.player}
-          playerOutput={sessionState.playerOutput as PlayerOutput}
           showPlayerModal={sessionState.showPlayerModal}
           playerModalHeading={
             sessionState.playerModalHeading as PlayerModalHeading
@@ -167,8 +164,8 @@ const Session: Component<props> = props => {
           closePlayerModalHandler={closePlayerModalHandler}
         />
         <PairsModal
-          player={sessionState.player}
-          opponent={sessionState.opponent}
+          playerPairs={sessionState.player.pairs}
+          opponentPairs={sessionState.opponent.pairs}
           showPairsModal={showPairsModal()}
           setShowPairsModal={setShowPairsModal}
         />

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, test, vi } from "vitest"
-import { render, waitFor } from "@solidjs/testing-library"
+import { render } from "@solidjs/testing-library"
 import { userEvent } from "@testing-library/user-event"
 import MainMenu from "@components/main-menu/main-menu"
 import { GameMode } from "@enums"
@@ -8,11 +8,15 @@ describe("MainMenu Component", () => {
   const setGameModeMock = vi.fn()
   const setMultiplayerMenuMock = vi.fn()
   const setShowInstructionsMock = vi.fn()
-  const { getByRole, getByTestId } = render(() => (
+  const setAppLoadedMock = vi.fn()
+
+  const { getByRole } = render(() => (
     <MainMenu
       setGameMode={setGameModeMock}
       setMultiplayerMenu={setMultiplayerMenuMock}
       setShowInstructions={setShowInstructionsMock}
+      appLoaded={false}
+      setAppLoaded={setAppLoadedMock}
     />
   ))
 
@@ -32,8 +36,6 @@ describe("MainMenu Component", () => {
     name: /instructions/i,
   })
 
-  const mainMenuWrapper = getByTestId("main-menu")
-
   it("renders", () => {
     expect(heading).toBeInTheDocument()
     expect(singlePlayerButton).toBeInTheDocument()
@@ -41,18 +43,36 @@ describe("MainMenu Component", () => {
     expect(instructionsButton).toBeInTheDocument()
   })
 
-  test("animation", async () => {
-    expect(mainMenuWrapper.className).toBe("main-menu")
+  test("no animation", async () => {
+    const { getByTestId } = render(() => (
+      <MainMenu
+        setGameMode={setGameModeMock}
+        setMultiplayerMenu={setMultiplayerMenuMock}
+        setShowInstructions={setShowInstructionsMock}
+        appLoaded={true}
+        setAppLoaded={setAppLoadedMock}
+      />
+    ))
 
-    await waitFor(
-      () =>
-        expect(mainMenuWrapper.className).toBe(
-          "main-menu main-menu--no-animation"
-        ),
-      {
-        timeout: 500,
-      }
-    )
+    const mainMenuEl = getByTestId("main menu")
+
+    expect(mainMenuEl.className).toBe("main-menu main-menu--no-animation")
+  })
+
+  test("animation", async () => {
+    const { getByTestId } = render(() => (
+      <MainMenu
+        setGameMode={setGameModeMock}
+        setMultiplayerMenu={setMultiplayerMenuMock}
+        setShowInstructions={setShowInstructionsMock}
+        appLoaded={false}
+        setAppLoaded={setAppLoadedMock}
+      />
+    ))
+
+    const mainMenuEl = getByTestId("main menu")
+
+    expect(mainMenuEl.className).toBe("main-menu")
   })
 
   describe("actions", () => {

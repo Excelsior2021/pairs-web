@@ -1,7 +1,7 @@
 import { createSignal, For, type Setter, type Component } from "solid-js"
 import { io } from "socket.io-client"
-import { createSessionHandler, terminateCreateSession } from "./component-lib"
-import { GameMode, PlayerID } from "@enums"
+import { createSessionHandler } from "./component-lib"
+import { GameMode, PlayerID, SessionType } from "@enums"
 import "./multiplayer-menu.scss"
 
 import type { multiplayerConfig } from "@types"
@@ -11,6 +11,7 @@ type props = {
   setGameMode: Setter<GameMode>
   setJoinGameMenu: Setter<boolean>
   setMultiplayerMenu: Setter<boolean>
+  terminateSession: (sessionType: SessionType) => void
 }
 
 const MultiplayerMenu: Component<props> = props => {
@@ -36,20 +37,13 @@ const MultiplayerMenu: Component<props> = props => {
     {
       name: "join session",
       onclick: () => {
-        terminateCreateSession(
-          props.multiplayerConfig.socket,
-          props.setMultiplayerMenu
-        )
+        props.terminateSession(SessionType.Create)
         props.setJoinGameMenu(true)
       },
     },
     {
       name: "←",
-      onclick: () =>
-        terminateCreateSession(
-          props.multiplayerConfig.socket,
-          props.setMultiplayerMenu
-        ),
+      onclick: () => props.terminateSession(SessionType.Create),
     },
   ]
 

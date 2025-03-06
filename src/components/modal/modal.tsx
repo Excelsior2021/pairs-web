@@ -7,7 +7,7 @@ import {
 import "./modal.scss"
 
 type contentProps = {
-  heading?: PlayerModalHeading | "instructions"
+  heading?: PlayerModalHeading | "instructions" | "quit game"
   subHeading?: PlayerModalSubHeading
   headingColor?: ModalHeadingColor
 }
@@ -15,7 +15,7 @@ type contentProps = {
 type modalProps = {
   showModal: boolean
   setShowModal: Setter<boolean>
-  heading?: PlayerModalHeading | "instructions"
+  heading?: PlayerModalHeading | "instructions" | "quit game"
   subHeading?: PlayerModalSubHeading
   headingColor?: ModalHeadingColor
   hideTitle?: true

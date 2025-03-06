@@ -1,15 +1,4 @@
-import type {
-  createGameHandler as createGameHandlerType,
-  terminateCreateSession as terminateCreateSessionType,
-} from "@types"
-
-export const terminateCreateSession: terminateCreateSessionType = (
-  socket,
-  setMultiplayerMenu
-) => {
-  setMultiplayerMenu(false)
-  socket?.disconnect()
-}
+import type { createGameHandler as createGameHandlerType } from "@types"
 
 export const createSessionHandler: createGameHandlerType = async (
   io,

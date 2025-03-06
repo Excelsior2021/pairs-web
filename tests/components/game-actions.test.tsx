@@ -8,6 +8,7 @@ describe("GameActions component", async () => {
   const { getByRole } = render(() => (
     <GameActions playerResponseHandler={playerResponseHandlerMock} />
   ))
+
   const yesButton = getByRole("button", { name: "yes" })
   const noButton = getByRole("button", { name: "no" })
   const user = userEvent.setup()

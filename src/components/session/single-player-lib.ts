@@ -5,7 +5,7 @@ import {
   Action,
 } from "@enums"
 
-import type { action, card, sessionState } from "@types"
+import type { action, sessionState } from "@types"
 import type { SetStoreFunction } from "solid-js/store"
 
 export const singlePlayerReducer = (
@@ -27,6 +27,7 @@ export const singlePlayerReducer = (
 
       setState("opponent", "hand", reconcile([...action.opponent!.hand]))
       setState("opponent", "pairs", reconcile([...action.opponent!.pairs]))
+
       break
     }
     case Action.PLAYER_MODAL: {
