@@ -1,4 +1,10 @@
-import { createSignal, Show, type Component, type Setter } from "solid-js"
+import {
+  createEffect,
+  createSignal,
+  Show,
+  type Component,
+  type Setter,
+} from "solid-js"
 import { createStore, produce, reconcile } from "solid-js/store"
 import { deck } from "@assets"
 import Game from "@components/game/game"
@@ -164,8 +170,18 @@ const Session: Component<props> = props => {
           closePlayerModalHandler={closePlayerModalHandler}
         />
         <PairsModal
-          playerPairs={sessionState.player.pairs}
-          opponentPairs={sessionState.opponent.pairs}
+          playersPairs={[
+            {
+              id: "player",
+              heading: `Your Pairs (${sessionState.player.pairs.length})`,
+              pairs: sessionState.player.pairs,
+            },
+            {
+              id: "opponent",
+              heading: `Opponent's Pairs (${sessionState.opponent.pairs.length})`,
+              pairs: sessionState.opponent.pairs,
+            },
+          ]}
           showPairsModal={showPairsModal()}
           setShowPairsModal={setShowPairsModal}
         />

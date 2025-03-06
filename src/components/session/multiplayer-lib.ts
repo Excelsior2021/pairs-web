@@ -13,7 +13,6 @@ import type {
   sessionState,
   action,
   handleAction,
-  card,
 } from "@types"
 import type { Socket } from "socket.io-client"
 import type { SetStoreFunction } from "solid-js/store"
