@@ -12,7 +12,7 @@
 
 <br />
 
-<img src="./pairs-demo.gif" alt="pairs demo" />
+<img src="./pairs.png" alt="pairs demo" />
 
 <!-- About the Project -->
 
