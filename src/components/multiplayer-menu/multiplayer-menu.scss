@@ -2,8 +2,13 @@
 
 .multiplayer-menu {
   @include menu;
-  & {
-    animation: none;
+
+  &__actions {
+    @include actions;
+  }
+
+  &__button {
+    @include button-menu;
   }
 
   &__text {

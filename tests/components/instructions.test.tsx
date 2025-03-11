@@ -1,8 +1,11 @@
-import Instructions from "@components/instructions/instructions"
+import Instructions, {
+  instructions,
+} from "@components/instructions/instructions"
 import { render } from "@solidjs/testing-library"
 import { describe, expect, it, vi } from "vitest"
 
 describe("Instructions Component", () => {
+  const instructionsMock = [...instructions]
   const setShowInstructionsMock = vi.fn()
 
   const { getByText, getAllByRole } = render(() => (
@@ -20,6 +23,6 @@ describe("Instructions Component", () => {
 
   it("renders", () => {
     expect(instructionsTextEl).toBeInTheDocument()
-    expect(instructionsListEls.length).toBe(9)
+    expect(instructionsListEls).toHaveLength(instructionsMock.length)
   })
 })

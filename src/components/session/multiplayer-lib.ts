@@ -25,33 +25,30 @@ export const multiplayerReducer = (
   playerID: PlayerID,
   sessionID: string,
   setState: SetStoreFunction<sessionState>,
-  produce: (
-    fn: (state: sessionState) => void
-  ) => (state: sessionState) => sessionState
+  reconcile
 ) => {
   switch (action.type) {
     case Action.UPDATE: {
       const { player1, player2, deck } = action.serverState!
 
-      setState(
-        produce((state: sessionState) => {
-          //update client side players state depending on client player
-          switch (playerID) {
-            case P1: {
-              state.player = player1
-              state.opponent = player2
-              state.log = action.player1Log || state.log
-              break
-            }
-            case P2: {
-              state.player = player2
-              state.opponent = player1
-              state.log = action.player2Log || state.log
-              break
-            }
-          }
-        })
-      )
+      switch (playerID) {
+        case P1: {
+          setState("player", "hand", reconcile(player1.hand))
+          setState("player", "pairs", reconcile(player1.pairs))
+          setState("opponent", "hand", reconcile(player2.hand))
+          setState("opponent", "pairs", reconcile(player2.pairs))
+          action.player1Log && setState("log", action.player1Log)
+          break
+        }
+        case P2: {
+          setState("player", "hand", reconcile(player2.hand))
+          setState("player", "pairs", reconcile(player2.pairs))
+          setState("opponent", "hand", reconcile(player1.hand))
+          setState("opponent", "pairs", reconcile(player1.pairs))
+          action.player2Log && setState("log", action.player2Log)
+          break
+        }
+      }
 
       let isPlayerTurn = false
       if (playerID === action.playerTurn) isPlayerTurn = true

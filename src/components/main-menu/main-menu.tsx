@@ -1,5 +1,6 @@
-import { createEffect, For, type Setter, type Component } from "solid-js"
+import { createEffect, type Setter, type Component } from "solid-js"
 import { GameMode } from "@enums"
+import Actions from "@components/actions/actions"
 import "./main-menu.scss"
 
 type props = {
@@ -13,21 +14,6 @@ type props = {
 const MainMenu: Component<props> = props => {
   createEffect(() => setTimeout(() => props.setAppLoaded(true), 500)) //delay for setTimeout, set to 500ms because animation is 500ms
 
-  const actions = [
-    {
-      name: GameMode.SinglePlayer,
-      onclick: () => props.setGameMode(GameMode.SinglePlayer),
-    },
-    {
-      name: GameMode.Multiplayer,
-      onclick: () => props.setMultiplayerMenu(true),
-    },
-    {
-      name: "instructions",
-      onclick: () => props.setShowInstructions(true),
-    },
-  ]
-
   return (
     <div
       class={
@@ -35,15 +21,24 @@ const MainMenu: Component<props> = props => {
       }
       data-testid="main menu">
       <h2 class="main-menu__heading">main menu</h2>
-      <div class="main-menu__actions">
-        <For each={actions}>
-          {action => (
-            <button class="main-menu__button" onclick={action.onclick}>
-              {action.name}
-            </button>
-          )}
-        </For>
-      </div>
+      <Actions
+        class="main-menu__actions"
+        buttonClass="main-menu__button"
+        actions={[
+          {
+            name: GameMode.SinglePlayer,
+            onclick: () => props.setGameMode(GameMode.SinglePlayer),
+          },
+          {
+            name: GameMode.Multiplayer,
+            onclick: () => props.setMultiplayerMenu(true),
+          },
+          {
+            name: "instructions",
+            onclick: () => props.setShowInstructions(true),
+          },
+        ]}
+      />
     </div>
   )
 }

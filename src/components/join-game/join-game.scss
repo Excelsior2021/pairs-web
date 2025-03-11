@@ -27,10 +27,14 @@
   }
 
   &__actions {
-    @include actions;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    width: 250px;
+    margin: auto;
   }
 
   &__button {
-    @include menu-button;
+    @include button-menu;
   }
 }

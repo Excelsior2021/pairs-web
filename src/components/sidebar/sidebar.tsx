@@ -1,4 +1,5 @@
-import { For, type Setter, type Component } from "solid-js"
+import { type Setter, type Component } from "solid-js"
+import Actions from "@components/actions/actions"
 import "./sidebar.scss"
 
 import type { GameMode } from "@enums"
@@ -12,27 +13,11 @@ type props = {
   setShowQuitGameModal: Setter<boolean>
 }
 
-const Sidebar: Component<props> = props => {
-  const actions = [
-    {
-      name: "pairs",
-      onclick: () => props.setShowPairsModal(true),
-    },
-    {
-      name: "instructions",
-      onclick: () => props.setShowInstructions(true),
-    },
-    {
-      name: "quit",
-      onclick: () => props.setShowQuitGameModal(true),
-      class: "sidebar__button--quit",
-    },
-  ]
-
-  return (
-    <div class="sidebar">
+const Sidebar: Component<props> = props => (
+  <div class="sidebar">
+    <div>
+      <h3 class="sidebar__heading">deck</h3>
       <div class="sidebar__deck">
-        <h3 class="sidebar__heading">deck</h3>
         <img
           class={
             props.isDealFromDeck
@@ -47,20 +32,31 @@ const Sidebar: Component<props> = props => {
           }}
         />
       </div>
-      <div class="sidebar__actions">
-        <h3 class="sidebar__heading">{props.gameMode}</h3>
-        <For each={actions}>
-          {action => (
-            <button
-              class={`sidebar__button ${action.class}`}
-              onclick={action.onclick}>
-              {action.name}
-            </button>
-          )}
-        </For>
-      </div>
     </div>
-  )
-}
+
+    <div>
+      <h3 class="sidebar__heading">{props.gameMode}</h3>
+      <Actions
+        class="sidebar__actions"
+        buttonClass="sidebar__button"
+        actions={[
+          {
+            name: "pairs",
+            onclick: () => props.setShowPairsModal(true),
+          },
+          {
+            name: "instructions",
+            onclick: () => props.setShowInstructions(true),
+          },
+          {
+            name: "quit",
+            onclick: () => props.setShowQuitGameModal(true),
+            class: "sidebar__button--quit",
+          },
+        ]}
+      />
+    </div>
+  </div>
+)
 
 export default Sidebar

@@ -22,11 +22,11 @@ export const singlePlayerReducer = (
         isDealFromDeck: action.isDealFromDeck,
         deckCount: action.deckCount,
       })
-      setState("player", "hand", reconcile([...action.player!.hand]))
-      setState("player", "pairs", reconcile([...action.player!.pairs]))
+      setState("player", "hand", reconcile(action.player!.hand))
+      setState("player", "pairs", reconcile(action.player!.pairs))
 
-      setState("opponent", "hand", reconcile([...action.opponent!.hand]))
-      setState("opponent", "pairs", reconcile([...action.opponent!.pairs]))
+      setState("opponent", "hand", reconcile(action.opponent!.hand))
+      setState("opponent", "pairs", reconcile(action.opponent!.pairs))
 
       break
     }
