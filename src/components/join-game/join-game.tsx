@@ -1,7 +1,8 @@
-import { createSignal, For, type Setter, type Component } from "solid-js"
+import { createSignal, type Setter, type Component } from "solid-js"
 import { io } from "socket.io-client"
 import { joinSessionHandler } from "./component-lib"
 import { GameMode, PlayerID, SessionType } from "@enums"
+import Actions from "@components/actions/actions"
 import "./join-game.scss"
 
 import type { multiplayerConfig } from "@types"
@@ -23,33 +24,6 @@ const JoinGame: Component<props> = props => {
     null
   )
 
-  const actions = [
-    {
-      name: "join",
-      onclick: () =>
-        joinSessionHandler(
-          joinSessionID(),
-          io,
-          props.multiplayerConfig,
-          props.setGameMode,
-          props.setJoinGameMenu,
-          setSessionIDNotValid,
-          setNoSessionExists,
-          setServerConnected,
-          setConnecting,
-          GameMode,
-          PlayerID
-        ),
-      disabled: () => connecting(),
-    },
-    {
-      name: "←",
-      onclick: () => {
-        props.terminateSession(SessionType.Join)
-      },
-    },
-  ]
-
   return (
     <div class="join-game">
       <h2 class="join-game__heading">Join a Game Session</h2>
@@ -65,19 +39,36 @@ const JoinGame: Component<props> = props => {
         onchange={event => setJoinSessionID(event.currentTarget.value)}
         aria-label="session id"
       />
-
-      <div class="join-game__actions">
-        <For each={actions}>
-          {action => (
-            <button
-              class="join-game__button"
-              onclick={action.onclick}
-              disabled={action.disabled && action.disabled()}>
-              {action.name}
-            </button>
-          )}
-        </For>
-      </div>
+      <Actions
+        class="join-game__actions"
+        buttonClass="join-game__button"
+        actions={[
+          {
+            name: "join",
+            onclick: () =>
+              joinSessionHandler(
+                joinSessionID(),
+                io,
+                props.multiplayerConfig,
+                props.setGameMode,
+                props.setJoinGameMenu,
+                setSessionIDNotValid,
+                setNoSessionExists,
+                setServerConnected,
+                setConnecting,
+                GameMode,
+                PlayerID
+              ),
+            disabled: () => connecting(),
+          },
+          {
+            name: "←",
+            onclick: () => {
+              props.terminateSession(SessionType.Join)
+            },
+          },
+        ]}
+      />
 
       {connecting() && (
         <p class="join-game__text join-game__text--info">

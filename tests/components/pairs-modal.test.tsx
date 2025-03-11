@@ -1,17 +1,28 @@
 import PairsModal from "@components/pairs-modal/pairs-modal"
 import { render } from "@solidjs/testing-library"
-import { card } from "@types"
 import { describe, expect, it, vi } from "vitest"
+import type { card } from "@types"
 
 describe("Pairs Modal Component", () => {
   const playerPairsMock = [{}, {}] as card[]
   const opponentPairsMock = [{}, {}, {}, {}] as card[]
+  const playersPairsMock = [
+    {
+      id: "player",
+      heading: `Your Pairs (${playerPairsMock.length})`,
+      pairs: playerPairsMock,
+    },
+    {
+      id: "opponent",
+      heading: `Opponent's Pairs (${opponentPairsMock.length})`,
+      pairs: opponentPairsMock,
+    },
+  ]
   const setShowPairsModalMock = vi.fn()
 
   const { getByText, getByTestId } = render(() => (
     <PairsModal
-      playerPairs={playerPairsMock}
-      opponentPairs={opponentPairsMock}
+      playersPairs={playersPairsMock}
       showPairsModal={true}
       setShowPairsModal={setShowPairsModalMock}
     />

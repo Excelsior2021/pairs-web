@@ -61,6 +61,6 @@
   }
 
   &__button {
-    @include modal-button;
+    @include button-modal;
   }
 }

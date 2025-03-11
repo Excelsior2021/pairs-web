@@ -13,9 +13,14 @@
   &:hover {
     background-color: rgb(132, 34, 34);
   }
+
+  &:disabled {
+    opacity: 0.8;
+    background-color: rgb(116, 34, 34);
+  }
 }
 
-@mixin menu-button {
+@mixin button-menu {
   @include button;
   & {
     font-size: 2rem;
@@ -24,7 +29,7 @@
   }
 }
 
-@mixin modal-button {
+@mixin button-modal {
   @include button;
   & {
     margin-top: 5rem;
@@ -42,19 +47,10 @@
 
 @mixin menu {
   text-align: center;
-  animation: menu-fade-in 0.5s linear;
 
   &__heading {
     text-transform: capitalize;
     margin-bottom: 2rem;
-  }
-
-  &__actions {
-    @include actions;
-  }
-
-  &__button {
-    @include menu-button;
   }
 }
 

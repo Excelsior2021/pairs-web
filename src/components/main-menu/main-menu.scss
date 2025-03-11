@@ -1,20 +1,19 @@
-@use "../../styles/variables" as *;
 @use "../../styles/mixins" as *;
 
 .main-menu {
+  animation: menu-fade-in 0.5s linear;
   @include menu;
-  & {
-    position: relative;
-  }
 
   &--no-animation {
     animation: none;
   }
 
+  &__actions {
+    @include actions;
+  }
+
   &__button {
-    &:disabled {
-      opacity: 0.5;
-    }
+    @include button-menu;
   }
 
   &__text {

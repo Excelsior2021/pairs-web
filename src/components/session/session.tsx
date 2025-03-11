@@ -1,11 +1,5 @@
-import {
-  createEffect,
-  createSignal,
-  Show,
-  type Component,
-  type Setter,
-} from "solid-js"
-import { createStore, produce, reconcile } from "solid-js/store"
+import { createSignal, Show, type Component, type Setter } from "solid-js"
+import { createStore, reconcile } from "solid-js/store"
 import { deck } from "@assets"
 import Game from "@components/game/game"
 import Sidebar from "@components/sidebar/sidebar"
@@ -103,7 +97,7 @@ const Session: Component<props> = props => {
         playerID as PlayerID,
         sessionID,
         setState,
-        produce
+        reconcile
       )
 
     playerTurnHandler = chosenCard =>
@@ -145,9 +139,11 @@ const Session: Component<props> = props => {
         }
         fallback={<CreateGame sessionID={sessionID} />}>
         <Game
-          player={sessionState.player}
-          opponent={sessionState.opponent}
-          isPlayerTurn={sessionState.isPlayerTurn!}
+          playerHand={sessionState.player.hand}
+          opponentHand={sessionState.opponent.hand}
+          playerPairsCount={sessionState.player.pairs.length}
+          opponentPairsCount={sessionState.opponent.pairs.length}
+          isPlayerTurn={sessionState.isPlayerTurn}
           isOpponentTurn={sessionState.isOpponentTurn}
           log={sessionState.log}
           gameOver={sessionState.gameOver}
@@ -156,7 +152,6 @@ const Session: Component<props> = props => {
           playerTurnHandler={playerTurnHandler!}
           playerResponseHandler={playerResponseHandler!}
         />
-
         <PlayerModal
           showPlayerModal={sessionState.showPlayerModal}
           playerModalHeading={

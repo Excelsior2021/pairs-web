@@ -1,7 +1,8 @@
-import { createSignal, For, type Setter, type Component } from "solid-js"
+import { createSignal, type Setter, type Component } from "solid-js"
 import { io } from "socket.io-client"
 import { createSessionHandler } from "./component-lib"
 import { GameMode, PlayerID, SessionType } from "@enums"
+import Actions from "@components/actions/actions"
 import "./multiplayer-menu.scss"
 
 import type { multiplayerConfig } from "@types"
@@ -18,50 +19,41 @@ const MultiplayerMenu: Component<props> = props => {
   const [serverConnected, setServerConnected] = createSignal<false | null>(null)
   const [connecting, setConnecting] = createSignal(false)
 
-  const actions = [
-    {
-      name: "create session",
-      onclick: () =>
-        createSessionHandler(
-          io,
-          props.multiplayerConfig,
-          props.setGameMode,
-          props.setMultiplayerMenu,
-          setConnecting,
-          setServerConnected,
-          GameMode,
-          PlayerID
-        ),
-      disabled: () => connecting(),
-    },
-    {
-      name: "join session",
-      onclick: () => {
-        props.terminateSession(SessionType.Create)
-        props.setJoinGameMenu(true)
-      },
-    },
-    {
-      name: "←",
-      onclick: () => props.terminateSession(SessionType.Create),
-    },
-  ]
-
   return (
     <div class="multiplayer-menu" data-testid="multiplayer menu">
       <h2 class="multiplayer-menu__heading">multiplayer</h2>
-      <div class="multiplayer-menu__actions">
-        <For each={actions}>
-          {action => (
-            <button
-              class="multiplayer-menu__button"
-              onclick={action.onclick}
-              disabled={action.disabled && action.disabled()}>
-              {action.name}
-            </button>
-          )}
-        </For>
-      </div>
+      <Actions
+        class="multiplayer-menu__actions"
+        buttonClass="multiplayer-menu__button"
+        actions={[
+          {
+            name: "create session",
+            onclick: () =>
+              createSessionHandler(
+                io,
+                props.multiplayerConfig,
+                props.setGameMode,
+                props.setMultiplayerMenu,
+                setConnecting,
+                setServerConnected,
+                GameMode,
+                PlayerID
+              ),
+            disabled: () => connecting(),
+          },
+          {
+            name: "join session",
+            onclick: () => {
+              props.terminateSession(SessionType.Create)
+              props.setJoinGameMenu(true)
+            },
+          },
+          {
+            name: "←",
+            onclick: () => props.terminateSession(SessionType.Create),
+          },
+        ]}
+      />
       {connecting() && (
         <p class="multiplayer-menu__text">Creating session...</p>
       )}
