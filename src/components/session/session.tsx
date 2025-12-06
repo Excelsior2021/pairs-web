@@ -137,7 +137,12 @@ const Session: Component<props> = props => {
           props.gameMode === GameMode.SinglePlayer ||
           sessionState.gameStartedMultiplayer
         }
-        fallback={<CreateGame sessionID={sessionID} />}>
+        fallback={
+          <CreateGame
+            sessionID={sessionID}
+            serverError={sessionState.outcome}
+          />
+        }>
         <Game
           playerHand={sessionState.player.hand}
           opponentHand={sessionState.opponent.hand}

@@ -28,8 +28,6 @@ export const joinSessionHandler: joinSessionHandlerType = async (
     reconnectionAttempts: 4,
   })
 
-  multiplayerConfig.socket = socket
-
   socket.on("connect", () => {
     setConnecting(false)
     setSessionIDNotValid(false)
@@ -37,7 +35,6 @@ export const joinSessionHandler: joinSessionHandlerType = async (
     setServerConnected(true)
 
     socket.emit("join_session", sessionID)
-    multiplayerConfig.playerID = PlayerID.P2
   })
 
   socket.io.on("reconnect_failed", () => {
@@ -51,7 +48,10 @@ export const joinSessionHandler: joinSessionHandlerType = async (
   })
 
   socket.on("sessionID_exists", sessionID => {
+    multiplayerConfig.socket = socket
+    multiplayerConfig.playerID = PlayerID.P2
     multiplayerConfig.sessionID = sessionID
+
     setJoinGameMenu(false)
     setGameMode(GameMode.Multiplayer)
   })

@@ -270,6 +270,15 @@ export const multiplayerReducer = (
       })
       break
     }
+    case Action.SERVER_ERROR: {
+      setState(state => ({
+        log: "",
+        outcome: Outcome.Server_Error,
+        gameOver: true,
+        deckCount: state.deck?.length,
+      }))
+      break
+    }
   }
 }
 
@@ -390,7 +399,12 @@ export const startSession = (socket: Socket, handleAction: handleAction) => {
     })
   })
 
-  socket.on("player_disconnected", () =>
+  socket.on("player_disconnected", () => {
     handleAction({ type: Action.PLAYER_DISCONNECTED })
-  )
+  })
+
+  socket.on("connect_error", error => {
+    handleAction({ type: Action.SERVER_ERROR })
+    socket.disconnect()
+  })
 }

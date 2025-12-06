@@ -58,6 +58,7 @@ export enum Outcome {
   Opponent = "Your opponent won!",
   Draw = "It's a draw!",
   Disconnect = "Your opponent has disconnected. The game has ended.",
+  Server_Error = "There was an issue with the server. The game has ended.",
 }
 
 export enum Action {
@@ -73,6 +74,7 @@ export enum Action {
   PLAYER_TURN_SWITCH = "PLAYER_TURN_SWITCH",
   PLAYER_DISCONNECTED = "PLAYER_DISCONNECTED",
   GAME_OVER = "GAME_OVER",
+  SERVER_ERROR = "SERVER_ERROR",
 }
 
 export enum ModalHeadingColor {
