@@ -11,10 +11,14 @@ export const createSessionHandler: createGameHandlerType = async (
   PlayerID
 ) => {
   setConnecting(true)
+  setServerConnected(null)
 
   const socket = io(import.meta.env.VITE_SERVER_DOMAIN, {
     reconnectionAttempts: 4,
   })
+
+  //set multiplayerConfig.socket in handler scope in case of the need to terminate
+  multiplayerConfig.socket = socket
 
   socket.on("connect", () => {
     setServerConnected(null)
@@ -23,7 +27,6 @@ export const createSessionHandler: createGameHandlerType = async (
       .toString()
       .padStart(4, "0")
 
-    multiplayerConfig.socket = socket
     multiplayerConfig.sessionID = sessionID
     multiplayerConfig.playerID = PlayerID.P1
 

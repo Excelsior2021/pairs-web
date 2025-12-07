@@ -38,7 +38,11 @@ const App: Component = () => {
       setJoinGameMenu(false)
       setMultiplayerMenu(true)
     }
-    if (multiplayerConfig.socket) multiplayerConfig.socket.disconnect()
+
+    if (multiplayerConfig.socket) {
+      multiplayerConfig.socket.disconnect()
+      multiplayerConfig.socket = null
+    }
   }
 
   return (

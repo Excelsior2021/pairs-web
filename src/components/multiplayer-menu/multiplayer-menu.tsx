@@ -50,7 +50,9 @@ const MultiplayerMenu: Component<props> = props => {
           },
           {
             name: "←",
-            onclick: () => props.terminateSession(SessionType.Create),
+            onclick: () => {
+              props.terminateSession(SessionType.Create)
+            },
           },
         ]}
       />
